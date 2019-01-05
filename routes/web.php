@@ -14,3 +14,17 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::post('/subscriber', 'SubscriberController@store');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+	Route::get('/', 'AdminController@index')->name('admin');
+	Route::resource('/services', 'ServiceController');
+	Route::resource('/slides', 'SlideController');
+	Route::get('/links', 'SocialLinkController@index');
+	Route::get('/links/{id}', 'SocialLinkController@edit');
+	Route::patch('/links/{id}', 'SocialLinkController@update');
+	Route::get('/subscribers', 'SubscriberController@index');
+});
