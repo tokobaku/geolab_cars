@@ -1,17 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Admin Panel</title>
-</head>
-<body>
-	<form action="/admin/links/{{ $link->id }}" method="POST">
+@extends('layouts.starter')
+
+@section('title', 'Admin Panel')
+
+@section('page_header', 'Edit Social Link')
+
+@section('active_field', 'links')
+
+@section('content')
+	<a href="{{ $link->link }}">{{ $link->name }}</a>
+	<img src="{{ asset($link->img) }}" style="width: 100px;" />
+	<form action="/admin/links/{{ $link->id }}" method="POST" enctype="multipart/form-data">
 		@csrf
 		@method('PATCH')
 
-		<input type="text" name="name" value="{{ $link->name }}" required><br>
 		<input type="text" name="link" value="{{ $link->link }}" required><br>
-		<input type="type" name="img" value="{{ $link->img }}" required><br>
+		<input type="file" name="file"><br>
 		<input type="submit" name="submit"  value="Save">
 	</form>
-</body>
-</html>
+@endsection

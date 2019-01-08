@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class ServiceController extends Controller
 {
@@ -36,12 +37,15 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'title' => 'required',
-            'img' => 'required'
+            'title' => 'required|string|max:255',
+            'file' => 'required|mimes:svg'
         ]);
+        $img = Input::file('file');
+        $name = microtime(true) . '.' . $img->getClientOriginalExtension();
+        $img->move('img/services/', $name);
         Service::create([
             'title' => request('title'),
-            'img' => request('img')
+            'img' => 'img/services/' . $name
         ]);
         return redirect('/admin/services/');
     }
@@ -78,12 +82,17 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         request()->validate([
-            'title' => 'required|max:255',
-            'img' => 'required|max:255'
+            'title' => 'required|max:255'
         ]);
+        $img = Input::file('file');
+        if ($img != null) {
+            request()->validate([
+                'file' => 'mimes:svg'
+            ]);
+            $img->move('img/services/', $service->img);
+        }
         $service->update([
             'title' => request('title'),
-            'img' => request('img')
         ]);
         return redirect('/admin/services/');
     }
@@ -96,6 +105,7 @@ class ServiceController extends Controller
      */
     public function destroy(Service $service)
     {
+        unlink(public_path() . '/' . $service->img);
         $service->delete();
         return redirect('/admin/services/');
     }

@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Admin Panel</title>
-</head>
-<body>
-	<a href="/admin/slides/{{ $slide->id }}/edit">Edit</a>
+@extends('layouts.starter')
+
+@section('title', 'Admin Panel')
+
+@section('page_header', $slide->title)
+
+@section('active_field', 'slides')
+
+@section('content')
+	<p>Date: {{ DateTime::createFromFormat("Y-m-d H:i:s", $slide->date)->format("d.m.") }}</p>
 	<br>
-	<h1>{{ $slide->title }}</h1>
-	<br>
-	<p>{{ $slide->img }}</p>
-	<br>
-	<p>{{ DateTime::createFromFormat("Y-m-d H:i:s", $slide->date)->format("d.m.") }}</p>
-</body>
-</html>
+	<img src="{{ asset($slide->img) }}" height="100%">
+	<a href="/admin/slides/{{ $slide->id }}/edit">
+		<button style="display: block; margin-top: 10px">Edit</button>
+	</a>
+@endsection

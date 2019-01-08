@@ -1,16 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Admin Panel</title>
-</head>
-<body>
-	<a href="/admin/slides/create">Create New</a>
+@extends('layouts.starter')
+
+@section('title', 'Admin Panel')
+
+@section('page_header', 'All Slides')
+
+@section('active_field', 'slides')
+
+@section('content')
+	<a href="/admin/slides/create">
+		<button>Create New</button>
+	</a>
 	<ul>
 		@foreach($slides as $slide)
-			<li>
-				<a href="/admin/slides/{{ $slide->id }}">{{ $slide->title }}</a>
+			<li style="margin: 10px">
+				<a href="/admin/slides/{{ $slide->id }}">
+				{{ $slide->title }}
+				<img src="{{ asset($slide->img) }}" width="100" />
+				</a>
 			</li>
 		@endforeach
 	</ul>
-</body>
-</html>
+@endsection

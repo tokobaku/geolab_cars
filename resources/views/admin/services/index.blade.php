@@ -1,16 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Admin Panel</title>
-</head>
-<body>
-	<a href="/admin/services/create">Create New</a>
+@extends('layouts.starter')
+
+@section('title', 'Admin Panel')
+
+@section('page_header', 'All Services')
+
+@section('active_field', 'services')
+
+@section('content')
+	<a href="/admin/services/create">
+		<button>Create New</button>
+	</a>
 	<ul>
 		@foreach($services as $service)
-			<li>
-				<a href="/admin/services/{{ $service->id }}">{{ $service->title }}</a>
+			<li style="padding: 10px;">
+				<a href="/admin/services/{{ $service->id }}">
+					{{ $service->title }}<br>
+					<img src="{{ asset($service->img) }}" width="200px">
+				</a>
 			</li>
 		@endforeach
 	</ul>
-</body>
-</html>
+@endsection

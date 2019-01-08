@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Slide;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 class SlideController extends Controller
 {
@@ -36,13 +38,16 @@ class SlideController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'title' => 'required|max:255',
-            'img' => 'required|max:255',
-            'date' => 'date|required'
+            'title' => 'required|string|max:255',
+            'file' => 'required|image',
+            'date' => 'required|date'
         ]);
+        $img = Input::file('file');
+        $name = microtime(true) . '.' . $img->getClientOriginalExtension();
+        $img->move('img/slides/', $name);
         Slide::create([
             'title' => request('title'),
-            'img' => request('img'),
+            'img' => 'img/slides/' . $name,
             'date' => \DateTime::createFromFormat('Y-m-d', request('date'))
         ]);
         return redirect('/admin/slides/');
@@ -81,12 +86,17 @@ class SlideController extends Controller
     {
         request()->validate([
             'title' => 'required|max:255',
-            'img' => 'required|max:255',
-            'date' => 'date|required'
+            'date' => 'required|date'
         ]);
+        $img = Input::file('file');
+        if ($img != null) {
+            request()->validate([
+                'file' => 'image'
+            ]);
+            $img->move('img/slides/', $slide->img);
+        }
         $slide->update([
             'title' => request('title'),
-            'img' => request('img'),
             'date' => \Carbon::createFromFormat('Y-m-d', request('date'))
         ]);
         return redirect('/admin/slides/');
@@ -100,6 +110,7 @@ class SlideController extends Controller
      */
     public function destroy(Slide $slide)
     {
+        unlink(public_path() . '/' . $slide->img);
         $slide->delete();
         return redirect('/admin/slides/');
     }
