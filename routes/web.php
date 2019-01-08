@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome', [
+    return view('index', [
     	'services' => App\Service::all(),
     	'slides' => App\Slide::all()
     ]);

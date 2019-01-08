@@ -23,6 +23,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.index');
+        $service_count = \App\Service::all()->count();
+        $subscriber_count = \App\Subscriber::all()->count();
+        return view('admin.index', [
+            'service_count' => $service_count,
+            'subscriber_count' => $subscriber_count
+        ]);
     }
 }
