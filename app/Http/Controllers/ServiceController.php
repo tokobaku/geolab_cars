@@ -38,7 +38,7 @@ class ServiceController extends Controller
     {
         request()->validate([
             'title' => 'required|string|max:255',
-            'file' => 'required|mimes:svg'
+            'file' => 'required|mimes:svg,png'
         ]);
         $img = Input::file('file');
         $name = microtime(true) . '.' . $img->getClientOriginalExtension();

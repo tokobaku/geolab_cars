@@ -11,11 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index', [
-    	'services' => App\Service::all(),
-    	'slides' => App\Slide::all()
-    ]);
+Route::get('/', 'SubscriberController@show_public');
+Route::get('/welcome', function () {
+	return view('welcome');
 });
 
 Auth::routes();
